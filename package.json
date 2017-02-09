@@ -1,0 +1,29 @@
+{
+  "name": "flair-api",
+  "version": "0.0.1",
+  "description": "A node implementation of the Flair Smart Vent API",
+  "author": "jchristman",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "babel -w src/ -d build/ -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jchristman/node-flair-api"
+  },
+  "bugs": {
+    "url": "https://github.com/jchristman/node-flair-api/issues"
+  },
+  "dependencies": {
+    "devour-client": "^1.4.1",
+    "promise": "^7.1.1",
+    "simple-oauth2": "^1.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0"
+  },
+  "license": "MIT"
+}
