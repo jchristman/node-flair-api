@@ -2,8 +2,8 @@ import Model from './model.js';
 import Users from './users.js';
 
 export default class Structures extends Model {
-    static type = 'structures';
-    static relationship_types = {
+    type = 'structures';
+    relationship_types = {
         alerts: [null],
         rooms: [null],
         'editor-users': [Users],

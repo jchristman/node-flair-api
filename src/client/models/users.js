@@ -2,8 +2,8 @@ import Model from './model.js';
 import Structures from './structures.js';
 
 export default class Users extends Model {
-    static type = 'users';
-    static relationship_types = {
+    type = 'users';
+    relationship_types = {
         'adminable-structures': [Structures],
         devices: [null],
         'primary-device': [null],

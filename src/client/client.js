@@ -41,10 +41,10 @@ class Client {
 
                 let model = _.map(data, (_data) => {
                     let matchedModel = _.find(Models, (_model) => {
-                         return _model.type === _data.type;
+                         return new _model(null).type === _data.type;
                     });
 
-                    return matchedModel === undefined ? undefined : new matchedModel(_data);
+                    return matchedModel === undefined ? undefined : (new matchedModel(this, _data, true)).init();
                 });
 
                 return model;
