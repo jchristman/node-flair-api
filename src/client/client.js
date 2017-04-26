@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 import { api_root } from './constants.js';
 import Models from './models';
+import Model from './models/model.js';
 
 class Client {
     constructor(client_id, client_secret) {
@@ -40,10 +41,7 @@ class Client {
                     data = [data];
 
                 let model = _.map(data, (_data) => {
-                    let matchedModel = _.find(Models, (_model) => {
-                         return new _model(null).type === _data.type;
-                    });
-
+                    let matchedModel = Model.getType(_data);
                     return matchedModel === undefined ? undefined : (new matchedModel(this, _data, true)).init();
                 });
 
