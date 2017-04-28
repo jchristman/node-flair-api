@@ -37,29 +37,34 @@ export default class Model {
 
     initRelationships(relationships, fill) {
         Object.keys(relationships).forEach(key => {
+            const rel = relationships[key];
             if (fill) {
                 if (!(key in this.relationship_types)) {
                     console.error(`API changed. Please notify via https://github.com/jchristman/node-flair-api/issues that "New relationship --- ${key} in ${this.type}"`);
                     return;
                 }
 
-                if (relationships[key].data !== undefined) {
-                    if (Array.isArray(relationships[key].data)) {
-                        for (const item of relationships[key].data) {
-                            const type = Model.getType(item);
-                            const link = relationships[key].links.related;
-
-                            console.log(type, link, relationships[key].data);
+                if (rel.data !== undefined) {
+                    if (Array.isArray(rel.data)) {
+                        for (const item of rel.data) {
+                            this.fillRelationship(key, item);
                         }
                     } else {
-                        const type = Model.getType(relationships[key].data);
-                        const link = relationships[key].links.related
-
-                        console.log(type, link, relationships[key].data);
+                        this.fillRelationship(key, rel.data);
                     }
                 }
             }
         });
+    }
+
+    fillRelationship(rel_key, item) {
+        const type = Model.getType(item);
+        const { id } = item;
+            
+        console.log(type, item, rel_key);
+        if (item.type === 'users')
+            return;
+        this.relationships.key = this.client.get(item.type, { id });
     }
 
     static getType(data) {
