@@ -33,6 +33,17 @@ class Client {
         this.client = new jsonApi({apiUrl: api_root, pluralize: false});
         this.client.headers['Authorization'] = 'Bearer ' + token.access_token;
 
+        const idToPath = {
+            name: 'id-to-path-request',
+            req: (payload) => {
+                if (payload.req.params.id !== undefined) {
+                    payload.req.url += `/${payload.req.params.id}`
+                    delete payload.req.params.id;
+                }
+                return payload;
+            }
+        }
+
         const modelDeserializer = {
             name: 'model-deserializer',
             res: (payload) => {
@@ -42,32 +53,15 @@ class Client {
 
                 let model = _.map(data, (_data) => {
                     let matchedModel = Model.getType(_data);
-                    return matchedModel === undefined ? undefined : (new matchedModel(this, _data, true)).init();
+                    return matchedModel === undefined ? undefined : (new matchedModel(this, _data, true));
                 });
 
                 return model;
             }
         }
 
-        const requestMiddleware = {
-            name: 'debug-pass-thru',
-            res: (payload) => {
-                console.log(payload);
-                return payload;
-            }
-        }
-
-        //this.client.insertMiddlewareBefore('axios-request', requestMiddleware)
-
+        this.client.insertMiddlewareBefore('axios-request', idToPath);
         this.client.replaceMiddleware('response', modelDeserializer);
-    }
-
-    async connect() {
-        if (this.client === undefined) {
-            const token = await this.getToken();
-            this.createClient(token);
-        }
-        return true;
     }
 
     discover(path) {
@@ -79,6 +73,14 @@ class Client {
 
         let request = this.client.request(api_root + path, 'GET', {}, {});
         return request;
+    }
+
+    async connect() {
+        if (this.client === undefined) {
+            const token = await this.getToken();
+            this.createClient(token);
+        }
+        return true;
     }
 
     async get(type, options = {}) {

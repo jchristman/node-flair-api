@@ -1,8 +1,16 @@
 import Model from './model.js';
 
+import BeaconSightings from './beacon-sightings.js';
+import HardwareVersions from './hardware-versions.js';
+import Rooms from './rooms.js';
+import SensorReadings from './sensor-readings.js';
+import States from './states';
+import Structures from './structures.js';
+import Vents from './vents.js';
+
 export default class Pucks extends Model {
-    type = 'pucks';
-    attribute_types = {
+    static type = 'pucks';
+    static attribute_types = {
         'demo-mode': null,
         'temperature-offset-c': null,
         'created-at': String,
@@ -13,23 +21,28 @@ export default class Pucks extends Model {
         'display-number': String,
         'current-humidity': null,
         'sub-ghz-radio-tx-power-mw': null,
-        orientation: String,
-        inactive: Boolean,
+        'orientation': String,
+        'inactive': Boolean,
         'reporting-interval-ds': Number,
         'updated-at': String,
-        name: String,
+        'name': String,
         'bluetooth-tx-power-mw': null,
-        'humidity-offset': null
+        'humidity-offset': null,
+        'oauth-app-assigned-at': Object,
+        'temperature-offset-override-c': Object,
+        'ir-setup-enabled': Object,
+        'ir-download': Boolean
     }
-    relationship_types = {
-        'current-state': null,
-        'sensor-readings': null,
-        'previous-state': null,
-        'hardware-version': null,
-        'closest-vents': null,
-        'puck-states': null,
-        structure: null,
-        'beacon-sightings': null,
-        room: null
+    static relationship_types = {
+        'current-state': States,
+        'sensor-readings': [SensorReadings],
+        'previous-state': States,
+        //'hardware-version': HardwareVersions,
+        'hardware-version': null,               // 405 Error: Method Not Allowed
+        'closest-vents': [Vents],
+        'puck-states': [States],
+        'structure': Structures,
+        'beacon-sightings': [BeaconSightings],
+        'room': Rooms
     }
 }
